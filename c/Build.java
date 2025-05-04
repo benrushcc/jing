@@ -79,16 +79,18 @@ public final class Build {
             throw new RuntimeException("Interrupted while compilation", e);
         }
 
-        String jingPath = System.getenv("jing.library.path");
+        String jingPath = System.getenv("JING_LIBRARY_PATH");
         if(jingPath != null && !jingPath.isBlank()) {
-            System.out.println("Copying " + jingPath + " to " + libPath + "... ");
+            Path src = libPath.resolve(libName);
+            Path dest = Paths.get(jingPath).resolve(libName);
+            System.out.println("Copying " + src + " to " + dest + "... ");
             try {
-                Files.copy(libPath.resolve(libName), Paths.get(jingPath).resolve(libName), StandardCopyOption.REPLACE_EXISTING);
+                Files.copy(src, dest, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException e) {
-                throw new RuntimeException("Failed while copying " + jingPath + " to " + libPath, e);
+                throw new RuntimeException("Failed while copying " + src + " to " + dest, e);
             }
         } else {
-            System.out.println("jing.library.path not found, skipping... ");
+            System.out.println("JING_LIBRARY_PATH not found, skipping... ");
         }
 
         System.out.println("\nOperation successfully completed, total build cost : %d milli seconds".formatted(Duration.between(now, LocalDateTime.now()).toMillis()));
@@ -140,7 +142,12 @@ public final class Build {
             };
         } else if (osName.contains("mac") && osName.contains("os")) {
             return new String[]{
-
+                    "clang", "-std=c17", "-Wall", "-Wextra", "-Werror", "-Wvla", "-Wshadow", "-Wconversion",
+                    "-shared", "-march=native", "-O3", "-g0", "-fcolor-diagnostics", "-fansi-escape-codes",
+                    "-v", "-fPIC", "-flto", "-fvisibility=hidden",
+                    "./mem.c", "../thirdparty/rpmalloc/rpmalloc/rpmalloc.c",
+                    "-pedantic", "-Wl,-s",
+                    "-o", "../lib/" + libName
             };
         }else {
             throw new RuntimeException("Unsupported OS: " + osName);

@@ -24,11 +24,11 @@ public interface SysMemLib {
     void alignedFree(MemorySegment seg);
 
     @Link(name = "jing_memchr", critical = true)
-    int memchr(MemorySegment ptr, byte ch, long size);
+    long memchr(MemorySegment ptr, byte ch, long size);
 
     @Link(name = "jing_memcpy", critical = true)
-    int memcpy(MemorySegment dst, long dstSize, MemorySegment src, long count);
+    void memcpy(MemorySegment dst, MemorySegment src, long count);
 
     @Link(name = "jing_memmove", critical = true)
-    int memmove(MemorySegment dst, long dstSize, MemorySegment src, long count);
+    void memmove(MemorySegment dst, MemorySegment src, long count);
 }

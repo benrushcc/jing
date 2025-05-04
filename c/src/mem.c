@@ -71,7 +71,7 @@ void *jing_rp_aligned_alloc(size_t alignment, size_t size) {
 
 // mem series functions
 
-int jing_memchr(const void* ptr, char ch, size_t count) {
+ptrdiff_t jing_memchr(const void* ptr, char ch, size_t count) {
     void* r = memchr(ptr, ch, count);
     if(r == NULL) {
         return -1;
@@ -79,12 +79,12 @@ int jing_memchr(const void* ptr, char ch, size_t count) {
     return ((char*)r) - ((char*)ptr);
 }
 
-int jing_memcpy(void* dest, size_t destsz, const void* src, size_t count) {
-    return memcpy_s(dest, destsz, src, count);
+void jing_memcpy(void* dest, const void* src, size_t count) {
+    memcpy(dest, src, count);
 }
 
-int jing_memmove(void* dest, size_t destsz, const void* src, size_t count) {
-    return memmove_s(dest, destsz, src, count);
+void jing_memmove(void* dest, const void* src, size_t count) {
+    memmove(dest, src, count);
 }
 
 

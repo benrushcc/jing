@@ -9,6 +9,7 @@ import java.lang.foreign.ValueLayout;
 import java.lang.invoke.VarHandle;
 import java.nio.ByteOrder;
 
+@SuppressWarnings("Duplicates")
 public final class MemAccess {
 
     public static final long MEMCPY_THRESHOLD = Long.getLong("jing.memcpy.threshold", 32L);
@@ -215,28 +216,28 @@ public final class MemAccess {
 
     /// Below are some unsafe memory manipulate methods, use at your own risk
 
-    public static int memchr(MemorySegment m, byte ch) {
+    public static long memchr(MemorySegment m, byte ch) {
         assert m.isNative() && m.address() != 0L;
         return SYS_MEM_LIB.memchr(m, ch, m.byteSize());
     }
 
     public static void memcpy(MemorySegment src, long srcOffset, MemorySegment dest, long destOffset, long count) {
         assert src.isNative() && dest.isNative() && src.address() != 0L && dest.address() != 0L;
+        if(Math.addExact(srcOffset, count) > src.byteSize() || Math.addExact(destOffset, count) > dest.byteSize()) {
+            throw new ArithmeticException("Overflow");
+        }
         MemorySegment s = MemorySegment.ofAddress(Math.addExact(src.address(), srcOffset));
         MemorySegment d = MemorySegment.ofAddress(Math.addExact(dest.address(), destOffset));
-        int errno = SYS_MEM_LIB.memcpy(d, Math.subtractExact(dest.byteSize(), destOffset), s, count);
-        if(errno != 0) {
-            throw new RuntimeException("Failed to memcpy, errno : " + errno);
-        }
+        SYS_MEM_LIB.memcpy(d, s, count);
     }
 
     public static void memmove(MemorySegment src, long srcOffset, MemorySegment dest, long destOffset, long count) {
         assert src.isNative() && dest.isNative() && src.address() != 0L && dest.address() != 0L;
+        if(Math.addExact(srcOffset, count) > src.byteSize() || Math.addExact(destOffset, count) > dest.byteSize()) {
+            throw new ArithmeticException("Overflow");
+        }
         MemorySegment s = MemorySegment.ofAddress(Math.addExact(src.address(), srcOffset));
         MemorySegment d = MemorySegment.ofAddress(Math.addExact(dest.address(), destOffset));
-        int errno = SYS_MEM_LIB.memmove(d, Math.subtractExact(dest.byteSize(), destOffset), s, count);
-        if(errno != 0) {
-            throw new RuntimeException("Failed to memmove, errno : " + errno);
-        }
+        SYS_MEM_LIB.memmove(d, s, count);
     }
 }

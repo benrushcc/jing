@@ -4,8 +4,7 @@ import io.github.benrushcc.codegen.Block;
 import io.github.benrushcc.codegen.CodeGenProcessor;
 import io.github.benrushcc.codegen.Source;
 import io.github.benrushcc.common.Generated;
-import io.github.benrushcc.common.experimental.ExStableValue;
-import io.github.benrushcc.common.experimental.ExValueBased;
+import io.github.benrushcc.common.experimental.ValueBased;
 import io.github.benrushcc.lib.Dyn;
 import io.github.benrushcc.lib.Lib;
 import io.github.benrushcc.lib.LibRegistry;
@@ -38,16 +37,16 @@ public final class LibProcessor extends CodeGenProcessor {
     private static final int INITIAL_SIZE = 32;
     private static final List<String> GENERATED_CLASS_NAMES = new ArrayList<>(INITIAL_SIZE);
 
-    private static final ExStableValue<TypeMirror> BOOLEAN_TYPE = ExStableValue.of();
-    private static final ExStableValue<TypeMirror> BYTE_TYPE = ExStableValue.of();
-    private static final ExStableValue<TypeMirror> SHORT_TYPE = ExStableValue.of();
-    private static final ExStableValue<TypeMirror> INT_TYPE = ExStableValue.of();
-    private static final ExStableValue<TypeMirror> LONG_TYPE = ExStableValue.of();
-    private static final ExStableValue<TypeMirror> FLOAT_TYPE = ExStableValue.of();
-    private static final ExStableValue<TypeMirror> DOUBLE_TYPE = ExStableValue.of();
-    private static final ExStableValue<TypeMirror> CHAR_TYPE = ExStableValue.of();
-    private static final ExStableValue<TypeMirror> VOID_TYPE = ExStableValue.of();
-    private static final ExStableValue<TypeMirror> PTR_TYPE = ExStableValue.of();
+    private static final StableValue<TypeMirror> BOOLEAN_TYPE = StableValue.of();
+    private static final StableValue<TypeMirror> BYTE_TYPE = StableValue.of();
+    private static final StableValue<TypeMirror> SHORT_TYPE = StableValue.of();
+    private static final StableValue<TypeMirror> INT_TYPE = StableValue.of();
+    private static final StableValue<TypeMirror> LONG_TYPE = StableValue.of();
+    private static final StableValue<TypeMirror> FLOAT_TYPE = StableValue.of();
+    private static final StableValue<TypeMirror> DOUBLE_TYPE = StableValue.of();
+    private static final StableValue<TypeMirror> CHAR_TYPE = StableValue.of();
+    private static final StableValue<TypeMirror> VOID_TYPE = StableValue.of();
+    private static final StableValue<TypeMirror> PTR_TYPE = StableValue.of();
 
     @Override
     public Set<String> getSupportedOptions() {
@@ -76,7 +75,7 @@ public final class LibProcessor extends CodeGenProcessor {
         PTR_TYPE.setOrThrow(elements.getTypeElement(MemorySegment.class.getCanonicalName()).asType());
     }
 
-    @ExValueBased
+    @ValueBased
     private record LinkData(
             ExecutableElement method,
             Link link
@@ -84,7 +83,7 @@ public final class LibProcessor extends CodeGenProcessor {
 
     }
 
-    @ExValueBased
+    @ValueBased
     private record LibData(
             TypeElement element,
             Lib lib,
@@ -239,8 +238,7 @@ public final class LibProcessor extends CodeGenProcessor {
         String intFunction = source.register(IntFunction.class);
         String methodHandle = source.register(MethodHandle.class);
         String exp = source.register(RuntimeException.class);
-        String stableValue = source.register(ExStableValue.class);
-        String targetInterface = source.register(env().getElementUtils(), libData.element());
+        String stableValue = source.register(StableValue.class);
         Block b = new Block().addLine("static {")
                 .indent()
                 .addLine(linker + " linker = " + linker + ".nativeLinker();");
@@ -420,7 +418,7 @@ public final class LibProcessor extends CodeGenProcessor {
         String cls = source.register(Class.class);
         String target = source.register(env().getElementUtils(), libData.element());
         String supplier = source.register(Supplier.class);
-        String stableValue = source.register(ExStableValue.class);
+        String stableValue = source.register(StableValue.class);
         return new Block()
                 .addLine("@Override")
                 .addLine("public " + cls + "<?> target() { ")
@@ -470,7 +468,7 @@ public final class LibProcessor extends CodeGenProcessor {
         }
     }
 
-    @ExValueBased
+    @ValueBased
     record ParameterStr(
             String fullParameters,
             String shortParameters

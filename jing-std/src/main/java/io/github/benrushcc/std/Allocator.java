@@ -1,7 +1,5 @@
 package io.github.benrushcc.std;
 
-import io.github.benrushcc.common.experimental.ExStableValue;
-
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.SegmentAllocator;
 import java.util.Arrays;
@@ -15,7 +13,7 @@ public sealed interface Allocator extends SegmentAllocator,  AutoCloseable {
         return ScopedValue.where(MEM_SCOPE, mem);
     }
 
-    ExStableValue<Allocator> HEAP_ALLOCATOR = ExStableValue.of();
+    StableValue<Allocator> HEAP_ALLOCATOR = StableValue.of();
 
     boolean isNative();
 

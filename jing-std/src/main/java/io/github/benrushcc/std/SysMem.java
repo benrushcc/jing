@@ -1,7 +1,6 @@
 package io.github.benrushcc.std;
 
 import io.github.benrushcc.common.Utils;
-import io.github.benrushcc.common.experimental.ExStableValue;
 import io.github.benrushcc.lib.LibContext;
 import io.github.benrushcc.std.lib.SysMemLib;
 
@@ -15,7 +14,7 @@ public final class SysMem {
         Utils.unsupportedInstantiated();
     }
 
-    private static final Supplier<Mem> MEM_SUPPLIER = ExStableValue.supplier(() -> new Mem() {
+    private static final Supplier<Mem> MEM_SUPPLIER = StableValue.supplier(() -> new Mem() {
         private static final SysMemLib lib = LibContext.acquire(SysMemLib.class);
         @Override
         public long alignmentBoundary() {

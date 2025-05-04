@@ -31,7 +31,7 @@ public final class Dyn {
     private static final Lock LIBRARY_CACHE_LOCK = new ReentrantLock();
 
     private static String searchCustomLibraryPath() {
-        String customPath = System.getenv("jing.library.path");
+        String customPath = System.getenv("JING_LIBRARY_PATH");
         if(customPath != null && !customPath.isBlank()) {
             return customPath;
         }

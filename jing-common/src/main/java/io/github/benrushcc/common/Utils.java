@@ -1,12 +1,10 @@
 package io.github.benrushcc.common;
 
-import io.github.benrushcc.common.experimental.ExStableValue;
-
 import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
 public final class Utils {
-    private static final Supplier<StackWalker> WALKER_SUPPLIER = ExStableValue.supplier(() -> StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE));
+    private static final Supplier<StackWalker> WALKER_SUPPLIER = StableValue.supplier(() -> StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE));
 
     private Utils() {
         unsupportedInstantiated();

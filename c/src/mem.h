@@ -30,10 +30,10 @@ EXPORT_SYMBOL void *jing_rp_realloc(void *ptr, size_t size);
 
 EXPORT_SYMBOL void *jing_rp_aligned_alloc(size_t alignment, size_t size);
 
-EXPORT_SYMBOL int jing_memchr(const void* ptr, char ch, size_t count);
+EXPORT_SYMBOL ptrdiff_t jing_memchr(const void* ptr, char ch, size_t count);
 
-EXPORT_SYMBOL int jing_memcpy(void* dest, size_t destsz, const void* src, size_t count);
+EXPORT_SYMBOL void jing_memcpy(void* dest, const void* src, size_t count);
 
-EXPORT_SYMBOL int jing_memmove(void* dest, size_t destsz, const void* src, size_t count);
+EXPORT_SYMBOL void jing_memmove(void* dest, const void* src, size_t count);
 
 #endif
