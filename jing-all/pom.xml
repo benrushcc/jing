@@ -1,0 +1,52 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.github.benrushcc</groupId>
+        <artifactId>jing</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>jing-all</artifactId>
+    <packaging>jar</packaging>
+    <name>jing-all</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.github.benrushcc</groupId>
+            <artifactId>jing-common</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.benrushcc</groupId>
+            <artifactId>jing-lib</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.benrushcc</groupId>
+            <artifactId>jing-serde</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.benrushcc</groupId>
+            <artifactId>jing-std</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.github.benrushcc</groupId>
+            <artifactId>jing-lib-processor</artifactId>
+            <version>${revision}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.benrushcc</groupId>
+            <artifactId>jing-serde-processor</artifactId>
+            <version>${revision}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+</project>

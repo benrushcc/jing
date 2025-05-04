@@ -1,2 +1,2 @@
 # jing
-Jing library for building micro-services at ease
+Jing library for building microservices at ease

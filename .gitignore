@@ -1,3 +1,17 @@
+*/target/*
+
+# IntelliJ IDEA
+.idea/*
+*.iws
+*.iml
+*.ipr
+
+# VS Code
+.vscode/
+
+# Mac OS
+.DS_Store
+
 # Compiled class file
 *.class
 
@@ -19,6 +33,16 @@
 *.tar.gz
 *.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+# Virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# JMH tests
+*.txt
+
+# Sqlite files
+*.db
+
+## C files
+c/lib
+c/thirdparty
