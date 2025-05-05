@@ -21,8 +21,6 @@ import java.util.List;
 import java.util.Set;
 
 public final class SerdeProcessor extends CodeGenProcessor {
-    private static final int INITIAL_SIZE = 1024;
-    private static final List<String> GENERATED_CLASS_NAMES = new ArrayList<>(INITIAL_SIZE);
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
@@ -31,22 +29,7 @@ public final class SerdeProcessor extends CodeGenProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        if(roundEnv.processingOver()) {
-            Filer filer = env().getFiler();
-            try {
-                FileObject fo = filer.createResource(StandardLocation.CLASS_OUTPUT, "", "serde.txt");
-                Path p = Paths.get(fo.toUri());
-                Files.deleteIfExists(p);
-                try(BufferedWriter writer = Files.newBufferedWriter(p, StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
-                    for (String s : GENERATED_CLASS_NAMES) {
-                        writer.write(s);
-                        writer.newLine();
-                    }
-                }
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to create serde resources", e);
-            }
-        } else {
+        if(!roundEnv.processingOver()) {
             Set<? extends Element> serdes = roundEnv.getElementsAnnotatedWith(Serde.class);
             for (Element e : serdes) {
                 // TODO

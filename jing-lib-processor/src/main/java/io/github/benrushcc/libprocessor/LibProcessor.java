@@ -10,7 +10,6 @@ import io.github.benrushcc.lib.Lib;
 import io.github.benrushcc.lib.LibRegistry;
 import io.github.benrushcc.lib.Link;
 
-import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.*;
@@ -18,24 +17,14 @@ import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
-import javax.tools.FileObject;
-import javax.tools.StandardLocation;
-import java.io.BufferedWriter;
-import java.io.IOException;
 import java.lang.foreign.*;
 import java.lang.invoke.MethodHandle;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.*;
 import java.util.function.IntFunction;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public final class LibProcessor extends CodeGenProcessor {
-    private static final int INITIAL_SIZE = 32;
-    private static final List<String> GENERATED_CLASS_NAMES = new ArrayList<>(INITIAL_SIZE);
 
     private static final StableValue<TypeMirror> BOOLEAN_TYPE = StableValue.of();
     private static final StableValue<TypeMirror> BYTE_TYPE = StableValue.of();
@@ -94,22 +83,7 @@ public final class LibProcessor extends CodeGenProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        if(roundEnv.processingOver()) {
-            Filer filer = env().getFiler();
-            try {
-                FileObject fo = filer.createResource(StandardLocation.CLASS_OUTPUT, "", "lib.txt");
-                Path p = Paths.get(fo.toUri());
-                Files.deleteIfExists(p);
-                try(BufferedWriter writer = Files.newBufferedWriter(p, StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
-                    for (String s : GENERATED_CLASS_NAMES) {
-                        writer.write(s);
-                        writer.newLine();
-                    }
-                }
-            } catch (IOException e) {
-                throw new RuntimeException("Failed to create lib resources", e);
-            }
-        } else {
+        if(!roundEnv.processingOver()) {
             Set<? extends Element> libs = roundEnv.getElementsAnnotatedWith(Lib.class);
             for (Element e : libs) {
                 TypeElement t = checkLibElement(e);
@@ -206,7 +180,6 @@ public final class LibProcessor extends CodeGenProcessor {
                 closureBlock()
         ));
         source.writeToFiler(env().getFiler());
-        GENERATED_CLASS_NAMES.add(source.sourceFileName());
     }
 
     private static Block outerDefinitionBlock(Source source, LibData libData) {
